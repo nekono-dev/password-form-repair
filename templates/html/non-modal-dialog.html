@@ -1,0 +1,66 @@
+<!doctype html>
+<!--
+  雛形（HTML）: パスワード欄を持つ非モーダルのダイアログ（パスワードを再入力する確認ダイアログなど）。SKILL.md「疑うポイント」#2・#3・#5・#6。
+  守ること:
+  - モーダル（showModal）にしない。トップレイヤーが拡張機能の候補表示を隠す。dialog.show()で開き、
+    ../non-modal-dialog.cssで中央に固定する（class="non-modal"）。
+  - モーダルでないとEscで閉じないので、keydownで補う。
+  - 閉じている間はフォームをDOMに置かない（閉じた<dialog>内のフォームは、開いても再検出されない）。
+    フォームは<template>に置き、開くたびに複製して追加し、閉じたら取り除く。
+  - 「ログイン中のユーザー名」を可視のtext欄（autocomplete="username"）で置く。非表示・readonlyの欄は検出されない。
+-->
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>確認ダイアログ</title>
+    <link rel="stylesheet" href="../non-modal-dialog.css" />
+  </head>
+  <body>
+    <button type="button" id="open-button">TODO: 操作名</button>
+    <!-- TODO: data-current-usernameに現在のユーザー名を入れる -->
+    <dialog id="password-dialog" class="non-modal" aria-label="TODO: ダイアログ名" data-current-username="">
+      <h2>TODO: 見出し</h2>
+      <div class="form-slot"></div>
+      <template>
+        <form>
+          <label>
+            ログイン中のユーザー名
+            <input type="text" name="username" autocomplete="username" />
+          </label>
+          <label>
+            ログインパスワード
+            <input type="password" name="current-password" autocomplete="current-password" required />
+          </label>
+          <div class="dialog-actions">
+            <button type="submit">実行</button>
+            <button type="button" class="cancel">キャンセル</button>
+          </div>
+        </form>
+      </template>
+    </dialog>
+    <script>
+      const dialog = document.getElementById("password-dialog");
+      const slot = dialog.querySelector(".form-slot");
+
+      function openDialog() {
+        const fragment = dialog.querySelector("template").content.cloneNode(true);
+        const form = fragment.querySelector("form");
+        form.elements.username.value = dialog.dataset.currentUsername;
+        form.querySelector(".cancel").addEventListener("click", () => dialog.close());
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const password = form.elements["current-password"].value;
+          form.elements["current-password"].value = "";
+          // TODO: API呼び出し（password を送る）。成功したら dialog.close()。
+        });
+        slot.replaceChildren(fragment);
+        dialog.show();
+      }
+
+      document.getElementById("open-button").addEventListener("click", openDialog);
+      dialog.addEventListener("keydown", (event) => event.key === "Escape" && dialog.close());
+      dialog.addEventListener("close", () => slot.replaceChildren());
+    </script>
+  </body>
+</html>

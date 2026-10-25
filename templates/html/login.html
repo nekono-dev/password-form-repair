@@ -1,0 +1,56 @@
+<!doctype html>
+<!--
+  雛形（HTML）: ユーザー名＋パスワード（＋任意の2段階認証）のログインフォーム。SKILL.md「疑うポイント」#1・#7・#8。
+  守ること:
+  - autocompleteはusername / current-password。offにしない（フォームが出なくなる）。
+  - 2段階認証欄は最初から<form>に置かない。<template>に置き、ボタンを押したときに<form>へ複製する（同居するとPassが反応しない）。
+    追加後はPassのフォームが出なくなるので、先に自動入力させてからボタンを押す運用になる。
+  - <form>にはユーザー名・パスワード・送信ボタンだけを置く。サーバ名などの他の欄は<form>の外の別の区画に置き、
+    type="search"にする（同じ区画のtext欄がPassの分類を崩した）。form属性で関連づけない。
+-->
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ログイン</title>
+  </head>
+  <body>
+    <main>
+      <section aria-label="ログイン">
+        <form id="login-form">
+          <label>
+            ユーザー名
+            <input type="text" name="username" autocomplete="username" required />
+          </label>
+          <label>
+            パスワード
+            <input type="password" name="password" autocomplete="current-password" required />
+          </label>
+          <div id="two-factor-slot"></div>
+          <button type="button" id="two-factor-button">2段階認証を設定している場合</button>
+          <button type="submit">ログイン</button>
+        </form>
+        <template id="two-factor-template">
+          <label>
+            2段階認証
+            <input type="text" name="twoFactorCode" inputmode="numeric" autocomplete="off" />
+          </label>
+        </template>
+      </section>
+    </main>
+    <script>
+      const form = document.getElementById("login-form");
+      const twoFactorButton = document.getElementById("two-factor-button");
+      twoFactorButton.addEventListener("click", () => {
+        document.getElementById("two-factor-slot").append(document.getElementById("two-factor-template").content.cloneNode(true));
+        twoFactorButton.remove();
+      });
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const data = new FormData(form);
+        // TODO: API呼び出し（data.get("username") / data.get("password") / data.get("twoFactorCode")）。
+        form.elements.password.value = ""; // 秘密は送信直後に消す
+      });
+    </script>
+  </body>
+</html>

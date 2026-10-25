@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: fixes-react-login-otp-and-reauth
+expected_outcome: |
+  LoginForm はユーザー名 autocomplete=username・パスワード current-password にし、ワンタイムコード欄は最初の <form> に置かず、ボタンを押したときに <form> 内へ追加する（form 属性で外に出さない）。
+  ReauthDialog は showModal ではなく show() で非モーダルに開き、閉じている間はフォームを描画しない。
+  フォームの先頭にログイン中のユーザー名を可視の username 欄で置き（App から渡す）、パスワード欄は current-password、ラベルから「確認」「再入力」を除く。
+  最後に、利用者が実機の Proton Pass で確かめる具体的な手順を示す。
+context:
+  scaffold_script: place-files.sh

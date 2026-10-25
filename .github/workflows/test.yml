@@ -1,0 +1,28 @@
+# 責務: 監査スクリプトが既知の落とし穴を検出し、雛形が監査を通ることを検査する。
+name: test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: 監査スクリプトの単体テスト
+        run: node --test tests/*.test.mjs
+
+      - name: 雛形の監査
+        run: node scripts/audit-forms.mjs templates
+
+      - name: 切り分けページの生成
+        run: node scripts/make-bisect-page.mjs "$RUNNER_TEMP/pw-test.html"

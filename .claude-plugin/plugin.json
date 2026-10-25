@@ -1,0 +1,10 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "password-form-repair",
+  "version": "1.0.0",
+  "description": "Webアプリのログイン・パスワード入力フォームを、パスワードマネージャ（Proton Pass等）が自動入力・パスワード生成できる形に直す／作るスキル。Proton Pass実機で確定した落とし穴の表、静的監査スクリプト、実機の切り分け手順、React・Preact・HTML・Astroの雛形を含む。",
+  "author": { "name": "nekono-dev" },
+  "repository": "https://github.com/nekono-dev/password-form-repair",
+  "license": "Unlicense",
+  "skills": ["./"]
+}

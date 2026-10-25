@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: fixes-preact-server-and-token-fields
+expected_outcome: |
+  <form> にはアカウント（username）・パスワード（current-password）・送信ボタンだけを置いたまま、ホスト名欄を type="search" にしてフォームとは別の区画（section など）へ分ける。
+  管理APIトークン欄は type="password" をやめ、type="search"・autocomplete="off" にして CSS（-webkit-text-security）で伏せ字にし、<form> の外に置く。form 属性で関連づけない。
+  最後に、利用者が実機の Proton Pass で確かめる具体的な手順を示す。
+context:
+  scaffold_script: place-files.sh

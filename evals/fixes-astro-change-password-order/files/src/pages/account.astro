@@ -1,0 +1,40 @@
+---
+// アカウント設定。ログイン中（middlewareがAstro.locals.accountを入れる）でなければログイン画面へ。
+const account = Astro.locals.account;
+if (!account) return Astro.redirect("/login");
+const status = Astro.url.searchParams.get("status");
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>アカウント設定</title>
+  </head>
+  <body>
+    <main>
+      <h1>アカウント設定</h1>
+      <p>ログイン中: {account.username}</p>
+      {status === "ok" && <p role="status">変更しました</p>}
+      {status === "ng" && <p role="alert">現在のパスワードが違います</p>}
+      <form method="post" action="/api/account">
+        <label>
+          現在のパスワード
+          <input type="password" name="currentPassword" autocomplete="off" required />
+        </label>
+        <label>
+          新しいユーザー名（変更する場合のみ）
+          <input type="text" name="newUsername" autocomplete="off" />
+        </label>
+        <label>
+          新しいパスワード（変更する場合のみ）
+          <input type="password" name="newPassword" autocomplete="off" />
+        </label>
+        <label>
+          新しいパスワード（確認）
+          <input type="password" name="newPasswordConfirm" autocomplete="off" />
+        </label>
+        <button type="submit">変更する</button>
+      </form>
+    </main>
+  </body>
+</html>

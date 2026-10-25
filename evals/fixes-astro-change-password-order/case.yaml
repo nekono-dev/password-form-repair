@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: fixes-astro-change-password-order
+expected_outcome: |
+  account.astro のフォームを「ユーザー名（autocomplete=username、現在のユーザー名で初期化）・現在のパスワード（current-password）・新しいパスワード（new-password）」の順にし、「新しいユーザー名」の別 text 欄を無くす。
+  ユーザー名の変更は username 欄の書き換えで行い、API 側は受け取ったユーザー名が現在と違うときだけ変更する。現在のパスワード欄のラベルに「確認」「再入力」を含めない。
+  最後に、利用者が実機の Proton Pass で確かめる具体的な手順を示す。
+context:
+  scaffold_script: place-files.sh
